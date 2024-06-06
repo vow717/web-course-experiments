@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 580px;
+            height: auto;
+            border: 1px solid black;
+            display: flex;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            border-bottom: 1px solid beige;
+        }
+
+        tr {
+            text-align: center;
+        }
+
+        tbody tr:hover {
+            background: antiquewhite;
+        }
+
+        td {
+            padding: 15px;
+        }
+
+        .conflict {
+            background-color: #ff9999;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table>
+        <thead style="background: #22ee50">
+        <tr>
+            <td>#</td>
+            <td>名称</td>
+            <td>学分</td>
+            <td>起止周</td>
+            <td>时间</td>
+            <td>教师</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const courses = [
+            {
+                id: 1,
+                name: 'C语言程序设计',
+                credit: 3,
+                startWeek: 1,
+                endWeek: 6,
+                day: '周一',
+                sections: [1, 2],
+                teacher: '李瑞改',
+                conflictCount: 0
+            },
+            {
+                id: 2,
+                name: 'Python程序设计',
+                credit: 3,
+                startWeek: 1,
+                endWeek: 18,
+                day: '周二',
+                sections: [5, 6],
+                teacher: '张光磊',
+                conflictCount: 0
+            },
+            {
+                id: 3,
+                name: 'Java程序设计',
+                credit: 4,
+                startWeek: 5,
+                endWeek: 15,
+                day: '周一',
+                sections: [1, 2],
+                teacher: '王波',
+                conflictCount: 0
+            },
+            {
+                id: 4,
+                name: 'Web开发',
+                credit: 3,
+                startWeek: 4,
+                endWeek: 12,
+                day: '周二',
+                sections: [5, 6],
+                teacher: '王波',
+                conflictCount: 0
+            },
+            {
+                id: 5,
+                name: '数据结构',
+                credit: 4,
+                startWeek: 9,
+                endWeek: 16,
+                day: '周一',
+                sections: [1, 2],
+                teacher: '张锡英',
+                conflictCount: 0
+            },
+            {
+                id: 6,
+                name: '算法设计',
+                credit: 4,
+                startWeek: 10,
+                endWeek: 16,
+                day: '周二',
+                sections: [5, 6],
+                teacher: '谷志新',
+                conflictCount: 0
+            },
+            {
+                id: 7,
+                name: '数据库',
+                credit: 4,
+                startWeek: 1,
+                endWeek: 14,
+                day: '周二',
+                sections: [3, 4],
+                teacher: '张锡英',
+                conflictCount: 0
+            }
+        ];
+        /*
+        加了个计数器记录目前这个课与多少已经勾选的课冲突。
+        用这个测试用例：1和5都与3冲突，而1，5不冲突，选了1，5后，只取消1或者5，3依然被封禁。
+         */
+
+        function createTable(courses) {
+            const tbody = $('table tbody');
+            tbody.empty();
+
+            courses.forEach(course => {
+                const row = $('<tr>');
+                row.append(`<td>${course.id}</td>`);
+                row.append(`<td>${course.name}</td>`);
+                row.append(`<td>${course.credit}</td>`);
+                row.append(`<td>${course.startWeek}-${course.endWeek}</td>`);
+                row.append(`<td>${course.day} ${course.sections.join('-')}节</td>`);
+                row.append(`<td>${course.teacher}</td>`);
+                row.append(`<td><input type="checkbox" name="course" value="${course.id}"></td>`);
+                tbody.append(row);
+
+                //添加对应的tr,input,免得后面再查找。
+                course.$input = row.find('input');
+                course.$tr = row;
+            });
+
+            /*
+            通过将事件绑定放在 createTable 函数中，确保了事件绑定发生在表格内容动态生成之后。
+            这样，你就可以确保在绑定事件处理程序时，所有的 <input> 元素都已经存在于 DOM 中，从而使得事件处理程序生效。
+             */
+            $("input").click(function (){
+                const courseIdNow=parseInt($(this).val());
+                const courseNow=courses.find(c=>c.id===courseIdNow);
+                const isChecked=$(this).prop("checked");
+
+                if(!conflictsMap.has(courseNow))
+                setConflicts(courseNow);
+
+                const conflictingCourses = conflictsMap.get(courseNow)||[];
+
+                for (const course of conflictingCourses) {
+                    if (isChecked) {
+                        course.course.conflictCount++;
+                        course.$tr.addClass("conflict");
+                        course.$input.prop("disabled", true);
+                    } else {
+                        course.course.conflictCount--;
+                        if (course.course.conflictCount === 0) {
+                           course.$tr.removeClass("conflict");
+                           course.$input.prop("disabled", false);
+                        }
+                    }
+                }
+            })
+        }
+        const conflictsMap=new Map();
+
+        // // 不再一开始就缓存冲突信息，而是在点击事件发生时动态更新
+        function setConflicts(course){
+                const conflictingCourses = courses.filter(c => c.id !== course.id && isCourseConflict(course, c));
+                const conflictInfo = conflictingCourses.map(c=>(
+                {
+                    course:c,
+                    $input:c.$input,
+                    $tr:c.$tr
+                }));
+                conflictsMap.set(course, conflictInfo||[]);
+        }
+
+        function isCourseConflict(course1, course2) {
+            return (
+                course1.day === course2.day &&
+                isWeeksOverlap(course1.startWeek, course1.endWeek, course2.startWeek, course2.endWeek) &&
+                isSectionsOverlap(course1.sections, course2.sections)
+            );
+        }
+        function isWeeksOverlap(startWeek1, endWeek1, startWeek2, endWeek2) {
+            return !(endWeek1 < startWeek2 || endWeek2 < startWeek1);
+        }
+        function isSectionsOverlap(sections1, sections2) {
+            return sections1.some(section => sections2.includes(section));
+        }
+
+
+        createTable(courses);
+    });
+</script>
+</body>
+</html>

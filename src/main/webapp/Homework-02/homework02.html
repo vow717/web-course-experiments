@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .container{
+      position: absolute;
+      display: flex;
+      justify-items: center;
+      max-width: 960px;
+      margin:auto;
+      padding: 100px;
+    }
+    .row{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: auto;
+    }
+    .card{
+      width: auto;
+      margin: auto 20px;
+      position: relative;
+      padding-top: 100px;
+      padding-bottom: 80px;
+      height: auto;
+      transition: padding-top 0.5s,padding-bottom 0.5s;
+    }
+    .card:hover{
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding-top: 0;
+      padding-bottom: 0;
+      height: auto;
+    }
+    .card-header{
+      width: 300px;
+    }
+    .card-header img{
+      border-radius: 50%;
+      width: 100%;
+      opacity: 0.5;
+      transition: opacity 0.5s;
+    }
+    .card:hover .card-header img{
+      opacity: 1;
+    }
+    .card-content{
+      text-align: justify;
+      width: 300px;
+      opacity: 0;
+      margin-top: -70px;
+      margin-bottom: -70px;
+      transition: opacity 0.3s,margin-top 0.5s,margin-bottom 0.5s;
+    }
+    .card:hover .card-content{
+    opacity: 1;
+      margin-top: 0;
+      margin-bottom: 0;
+
+    }
+    .card-footer{
+      background: red;
+      width: 40%;
+      padding: 5px;
+      margin: 5px;
+      text-align: center;
+      border-radius: 10px;
+      opacity: 0.5;
+      transition: opacity 0.5s;
+    }
+    .card:hover .card-footer{
+      opacity: 1;
+    }
+    .card-footer a{
+      text-decoration: none;
+      color:white;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <img src="https://picsum.photos/200/200/?random=1" alt="">
+      </div>
+      <div class="card-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium debitis dolorum ducimus iste
+          laudantium non optio reprehenderit tenetur ullam! Aliquid at, commodi deserunt dolorem eligendi
+          fugiat natus nihil non nostrum quisquam, ratione. lor</p>
+      </div>
+      <div class="card-footer">
+        <a class="more" href="">Read More</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <img src="https://picsum.photos/200/200/?random=2" alt="">
+      </div>
+      <div class="card-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium debitis dolorum ducimus iste
+          laudantium non optio reprehenderit tenetur ullam! Aliquid at, commodi deserunt dolorem eligendi
+          fugiat natus nihil non nostrum quisquam, ratione.</p>
+      </div>
+      <div class="card-footer">
+        <a class="more"  href="">Read More</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <img src="https://picsum.photos/200/200/?random=3" alt="">
+      </div>
+      <div class="card-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium debitis dolorum ducimus iste
+          laudantium non optio reprehenderit tenetur ullam! Aliquid at, commodi deserunt dolorem eligendi
+          fugiat natus nihil non nostrum quisquam, ratione.</p>
+      </div>
+      <div class="card-footer">
+        <a class="more"  href="">Read More</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

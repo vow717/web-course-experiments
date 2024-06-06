@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container{
+            display: block;
+            padding: 10px;
+            border: 1px solid red;
+            width: 420px;
+            height: auto;
+        }
+        div{
+            margin: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div>
+        <p>请输入一串数字,2s后变成,隔开版</p>
+        <input type="text" onkeydown="model.handleKeyDown()" onkeyup="model.handleKeyUp(this)">
+    </div>
+    <hr>
+    <div>
+        <p id="list"></p>
+        <button onclick="model2.lookAll()">点击查看完整对象数组版</button>
+        <br>
+        <button onclick="model2.changeToUnique('id')">点击查看去重ID版</button>
+        <br>
+        <button onclick="model2.changeToUnique('name')">点击查看去重NAME版</button>
+    </div>
+</div>
+
+<script>
+    const model=(()=>{
+        let timer;
+        function handleKeyDown(){
+            clearTimeout(timer);
+        }
+        function handleKeyUp(input){
+            timer=setTimeout(()=>{
+                /*每次执行前要把之前逗号去掉，不然会12,345后续再写个6变成12,3,456（12后面的，保留了)。*/
+                let inputValue = input.value.split(',').join('');
+
+                const inputArray=inputValue.split('');
+                for(let i=inputArray.length-3;i>0;i-=3)
+                    inputArray.splice(i,0,',');
+                input.value = inputArray.join('');
+            },2000)
+        }
+        return {
+            handleKeyDown:handleKeyDown,
+            handleKeyUp:handleKeyUp,
+        }
+    })();
+
+    const model2=(()=>{
+        const objs = [
+            { id: 9, name: "Alice" },
+            { id: 8, name: "Bob" },
+            { id: 7, name: "Charlie" },
+            { id: 7, name: "Dave" },
+            { id: 7, name: "Charlie" },
+            { id: 6, name: "Frank" }
+        ];
+        function removeSameBy(unique){
+            const objs1=objs;
+            const seen=new Set();
+            return objs1.filter(item=>{
+                if (seen.has(item[unique])) {
+                    return false;
+                } else {
+                    seen.add(item[unique]);
+                    return true;
+                }
+            })
+        }
+
+        const input=document.getElementById("list");
+        function changeToUnique(unique){
+            input.innerHTML=JSON.stringify(removeSameBy(unique));
+        }
+        function lookAll(){
+            input.innerHTML=JSON.stringify(objs);
+        }
+        return {
+            lookAll:lookAll,
+            changeToUnique:changeToUnique,
+        }
+    })();
+    /*
+        JSON.stringify(value, replacer, space)方法将 JavaScript 对象转换为 JSON 字符串。
+如果 value 参数是一个对象或数组，会对其中的每个属性或元素进行序列化。
+如果 value 参数是一个非对象的值（如字符串、数字、布尔值等），会直接转换为对应的 JSON 字符串。
+当使用 replacer 参数时，可以通过指定一个函数来自定义序列化过程，或者传入一个属性数组来选择要序列化的属性。
+当使用 space 参数时，可以指定一个字符串或数字来指定输出格式的缩进方式。
+
+         */
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="E3.css">
+</head>
+<body>
+
+<form action="/register" method="post">
+<div>
+  <p>个人信息</p>
+  用户名：<input type="text" name="" id=""placeholder="请输入账号">
+  <br>
+  密码：<input type="password">
+  <br>
+  性别:<label><input type="radio" name="gender" value="male">男 </label>
+    <label><input type="radio" name="gender" value="female">女</label>
+    <br>
+    生日: <input type="date">
+    <br>
+    籍贯: <input type="text">
+    <br>
+    学历:
+    <select name="" id="">
+        <option value="">小学</option>
+        <option value="">初中</option>
+        <option value="">高中</option>
+        <option value="">大学</option>
+        <option value="">硕士</option>
+    </select>
+    <p>其他信息</p>
+    <p>喜欢的课程:</p>
+    <ul>
+    <li><input type="checkbox" name="" id="" checked disabled>Web开发技术 </li><br>
+    <li><input type="checkbox" name="" id="">Java程序设计 </li><br>
+    <li><input type="checkbox" name="" id="">数据库原理 </li><br>
+    <li><input type="checkbox" name="" id="">系统分析与测试 </li><br>
+    </ul>
+    照片:
+    <input id="photo" type="file" accept=".jpg, .png">
+</div>
+    <button type="submit">提交</button>
+    <button type="reset">重置</button>
+</form>
+</body>
+</html>

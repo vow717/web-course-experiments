@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        *{
+            padding:0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container{
+            display: flex;
+            margin: 10px;
+            height: auto;
+            justify-content: flex-start;
+            border: 1px solid black;
+        }
+        li{
+            position: relative;
+            list-style-type: none;
+        }
+        li:hover{
+            background: white;
+        }
+        li a{
+                text-decoration: none;
+                display: block;
+                color: black;
+            padding: 10px;
+        }
+
+        .row{
+            display: flex;
+            flex-direction: row;
+            height: auto;
+        }
+        .badge-container{
+            position: relative;
+            top: 0;
+            left: 0;
+            display: inline-block;
+            margin: 10px;
+            background: goldenrod;
+            width: 60px;
+            height: auto;
+            z-index: 1;
+            transition: width 0.75s;
+        }
+        .badge-container:hover{
+            width: 160px;
+        }
+
+        .badge-container span{
+            visibility: hidden;
+            text-decoration: none;
+            position: absolute;
+            color:black;
+            top: 2px;
+            padding: 10px;
+            z-index: 2;
+            transition: opacity 0.5s, transform 0.5s;
+            opacity: 0;
+            transform: translateX(10px);
+        }
+        .badge-container:hover span{
+           visibility: visible;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .information{
+            margin: 20px;
+            position: absolute;
+            left: 80px;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div  class="badge-container">
+            <ul>
+                <li>
+                    <a href=""> <i class="material-icons">dashboard</i>
+                            <span>dashboard</span></a>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="material-icons">computer</i>
+                            <span>computer</span></a>
+
+                </li>
+                <li>
+                    <a href="">
+                       <i class="material-icons">timelapse</i>
+                            <span>timelapse</span></a>
+
+                </li>
+
+                <li>
+                    <a href="">
+                        <i class="material-icons">style</i>
+                            <span class="">style</span></a>
+
+                </li>
+
+                <li>
+                    <a href="">
+                        <i class="material-icons">reorder</i>
+                            <span>reorder</span></a>
+                </li>
+
+            </ul>
+        </div>
+       <div class="information">
+            Lorem ipsum dolor sit amet, cons
+            ectetur adipisicing elit. Ad beatae distinctio dolore,
+            doloribus ea eveniet facere hic illum molestias nam, omnis provident quaera
+            t quas quasi quibusdam sequi ut! Accusantium alias aliquam aliquid architec
+            to autem commodi deserunt earum eos et expedita incidunt, iure libero mag
+            nam magni maiores minus nesciunt officia officiis porro quam, recusandae tempo
+            ribus tenetur totam vitae voluptatibus! Accusantium dignissimos doloribus id ips
+            a itaque minima nam praesentium ratione similique sit? Deserunt, illo, mollitia!
+            Aut et ipsum magni vitae voluptatem. Ab adipisci aperiam autem distinctio enim
+            et harum iure, labore, nam numquam perspiciatis place
+            at saepe voluptatibus. Asperna tur modi quasi sunt? Qui.Lorem ipsum dolor sit
+            amet, consectetur adipisicing elit. Ab doloremque facili
+            s labore?
+       </div>
+    </div>
+</div>
+</body>
+</html>

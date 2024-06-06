@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .container{
+      width: 220px;
+      height: auto;
+      background: darkgray;
+    }
+    .sidebar-group{
+      list-style: none;
+    }
+    .sidebar-group h2{
+      background: deepskyblue;
+      margin: 2px;
+      padding: 10px;
+      color:white;
+      font-size: 30px;
+      cursor: grab;
+    }
+    .sidebar-group h2:hover{
+      background: #2c1112;
+      color: white;
+    }
+    .sidebar-group ul{
+      display: none;
+    }
+
+    .sidebar-group li a{
+      background: honeydew;
+      display: block;
+      font-size: 20px;
+      color:black;
+      padding: 10px;
+      text-decoration: none;
+    }
+    .sidebar-group li a:hover{
+      background: #262525;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar-group">
+  <h2 >云计算管理</h2>
+  <ul>
+    <li><a href="">云服务器</a></li>
+    <li><a href="">云数据库</a></li>
+    <li><a href="">负载均衡</a></li>
+  </ul>
+  </div>
+  <div class="sidebar-group">
+  <h2>安全管理</h2>
+  <ul>
+    <li><a href="">云盾控制台</a></li>
+    <li><a href="">DDoS高防IP</a></li>
+    <li><a href="">Web应用防火墙</a></li>
+    <li><a href="">CA证书服务</a></li>
+  </ul>
+  </div>
+  <div class="sidebar-group">
+  <h2>电子产品</h2>
+  <ul>
+    <li><a href="">手机</a></li>
+    <li><a href="">电脑</a></li>
+    <li><a href="">平板电脑</a></li>
+  </ul>
+  </div>
+  <div class="sidebar-group">
+  <h2>家用电器</h2>
+  <ul>
+    <li><a href="">洗衣机</a></li>
+    <li><a href="">冰箱</a></li>
+    <li><a href="">空调</a></li>
+  </ul>
+  </div>
+</div>
+<script>
+  $(function () {
+    $(".sidebar-group>h2").click(function () {
+      let ul = $(this).next("ul");
+      ul.slideToggle();
+      $(".sidebar-group >ul").not(ul).slideUp();
+    });
+  })
+</script>
+</body>
+</html>

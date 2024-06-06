@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container{
+            width: 580px;
+            height: auto;
+            border: 1px solid black;
+            display: flex;
+        }
+        table{
+            border: none;
+            border-collapse: collapse;
+            border-bottom: 1px solid beige;
+        }
+        tr{
+            text-align: center;
+        }
+        tbody tr:hover{
+            background: antiquewhite;
+        }
+        td{
+            padding: 15px;
+        }
+        .conflict {
+            background-color: #ff9999;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table>
+        <thead style="background: #22ee50">
+        <tr>
+            <td>#</td>
+            <td>名称</td>
+            <td>学分</td>
+            <td>起止周</td>
+            <td>时间</td>
+            <td>教师</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>C语言程序设计</td>
+            <td>3</td>
+            <td>8-16</td>
+            <td>周一 1-2节</td>
+            <td>李瑞改</td>
+            <td><input type="checkbox" name="course" value="course1"></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Python程序设计</td>
+            <td>3</td>
+            <td>1-8</td>
+            <td>周二 5-6节</td>
+            <td>张光磊</td>
+            <td><input type="checkbox" name="course" value="course2"></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Java程序设计</td>
+            <td>4</td>
+            <td>5-15</td>
+            <td>周三 1-2节</td>
+            <td>王波</td>
+            <td><input type="checkbox" name="course" value="course3"></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Web开发</td>
+            <td>3</td>
+            <td>4-12</td>
+            <td>周二 5-6节</td>
+            <td>王波</td>
+            <td><input type="checkbox" name="course" value="course4"></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>数据结构</td>
+            <td>4</td>
+            <td>1-16</td>
+            <td>周一 1-2节</td>
+            <td>张锡英</td>
+            <td><input type="checkbox" name="course" value="course5"></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>算法设计</td>
+            <td>4</td>
+            <td>10-16</td>
+            <td>周二 5-6节</td>
+            <td>谷志新</td>
+            <td><input type="checkbox" name="course" value="course6"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        const courses = [
+            {
+                id: 'course1',
+                name: 'C语言程序设计',
+                credit: 3,
+                weeks: {start: 8, end: 16},
+                schedule: {day: 'Monday', sections: [1, 2]},
+                teacher: '李瑞改'
+            },
+            {
+                id: 'course2',
+                name: 'Python程序设计',
+                credit: 3,
+                weeks: {start: 1, end: 8},
+                schedule: {day: 'Tuesday', sections: [5, 6]},
+                teacher: '张光磊'
+            },
+            {
+                id: 'course3',
+                name: 'Java程序设计',
+                credit: 4,
+                weeks: {start: 5, end: 15},
+                schedule: {day: 'Wednesday', sections: [1, 2]},
+                teacher: '王波'
+            },
+            {
+                id: 'course4',
+                name: 'Web开发',
+                credit: 3,
+                weeks: {start: 4, end: 12},
+                schedule: {day: 'Tuesday', sections: [5, 6]},
+                teacher: '王波'
+            },
+            {
+                id: 'course5',
+                name: '数据结构',
+                credit: 4,
+                weeks: {start: 1, end: 16},
+                schedule: {day: 'Monday', sections: [1, 2]},
+                teacher: '张锡英'
+            },
+            {
+                id: 'course6',
+                name: '算法设计',
+                credit: 4,
+                weeks: {start: 10, end: 16},
+                schedule: {day: 'Tuesday', sections: [5, 6]},
+                teacher: '谷志新'
+            }
+        ];
+
+        function isWeeksOverlap(weeks1, weeks2) {
+            return !(weeks1.end < weeks2.start || weeks2.end < weeks1.start);
+        }
+
+        const selectedCourses = [];
+        $("input").click(function () {
+            const courseId = $(this).val();
+            const isChecked = $(this).prop('checked');
+            const course = courses.find(c => c.id === courseId);
+            let ccourses = [];
+            if (isChecked) {
+                selectedCourses.push(course);
+            } else {
+                const index = selectedCourses.findIndex(c => c.id === courseId);
+                if (index !== -1) {
+                    selectedCourses.splice(index, 1); // 从数组中移除取消选择的课程
+                }
+            }
+            /*
+        双重循环查找，时间复杂度高。
+        以后可以考虑设个标记，标记已经被插入ccourses对象数组的课程，这样c of courses就更快
+         */
+            for (let course of selectedCourses) {
+                for (let c of courses) {
+                    if (c.id !== courseId && c.schedule.day === course.schedule.day && !$(`input[value=${c.id}]`).prop('checked')) {
+                        for (let section of course.schedule.sections) {
+                            if (c.schedule.sections.includes(section) && isWeeksOverlap(c.weeks, course.weeks))
+                                ccourses.push(c);
+                        }
+                    }
+                }
+            }
+            $("input").prop("disabled", false).closest('tr').removeClass('conflict');
+            for (let c of ccourses) {
+                $(`input[value=${c.id}]`).prop("disabled", true).closest('tr').addClass('conflict');
+            }
+
+
+        })
+        /*
+问题:如果说一门课，一周有多节，上课时间不一样，或者是上课周数不是连续，分段的，又或者更复杂，不同周上课时间不一样怎么办？
+丰富数据结构，把schedule对象数组放进weeks对象数组，类似：
+     weeks: [
+                { start: 1, end: 1, schedule: [{ day: 'Tuesday', sections: [5, 6] }] },
+                { start: 3, end: 3, schedule: [{ day: 'Monday', sections: [5, 6] }],{ day: 'Wednesday', sections: [3, 4] }] }，
+                { start: 5, end: 8, schedule: [{ day: 'Tuesday', sections: [1, 2] }] }
+            ],
+再修改搜索代码，是否能够实现？
+ */
+    })
+</script>
+</body>
+</html>

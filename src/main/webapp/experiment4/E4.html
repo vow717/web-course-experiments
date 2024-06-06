@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container{
+            display: block;
+            padding: 5px;
+        }
+        
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <form action="">
+    <div>
+    <label><input type="checkbox" id="Agree">我已阅读相关说明并遵守相关法律</label>
+    </div>
+    <div id="allCanUse">
+        <span>用户名:</span>
+        <label><input type="text" name="userName" placeholder="请输入超过6个字符的用户名"></label><br>
+            <span>未来意向:</span>
+        <label><input type="radio" name="futureWork" >Java工程师</label>
+        <label><input type="radio" name="futureWork" >测试工程师</label>
+        <label><input type="radio" name="futureWork" >前端工程师</label>
+        <br><br>
+        <p>请从以下课程中选择2项最喜欢的课程</p>
+        <ul>
+            <li><label><input type="checkbox" name="items" >Web开发计算</label></li>
+            <li><label><input type="checkbox" name="items" >软件项目管理</label></li>
+            <li><label><input type="checkbox" name="items" >数据库原理</label></li>
+            <li><label><input type="checkbox" name="items" >系统分析与设计</label></li>
+        </ul>
+        <br>
+        <p>地址:</p>
+        <input type="text" >
+        <button type="button" >添加地址</button>
+        <br>
+        <div style="height: 30px;padding: 5px;display: none;" id="submitDiv">
+        <button type="submit" >提交</button>
+        </div>
+        <p>(请输入大于等于6个字符的用户名和选两个最喜欢的课程，不然无法提交)</p>
+    </div>
+    </form>
+</div>
+
+<script>
+
+    $(function (){
+        $("#allCanUse").find("*").prop("disabled",true);
+
+        $("#Agree").change(function (){
+            const agree=$("#Agree").prop("checked");
+            $("#allCanUse").find("*").prop("disabled",!agree);
+        })
+
+        let isOrder = false;
+        $("input[type=radio]").mousedown(function (){
+            isOrder=$(this).prop("checked");
+        }).click(function (){
+            if(isOrder)
+            $(this).prop("checked",false);
+        })
+
+        const itemNum=2;
+        const checkNum=$("input[name=items]")
+        checkNum.click(()=>{
+            let dis=checkNum.filter(":checked").length>=itemNum;
+            checkNum.not(":checked").prop("disabled",dis);
+            isCanSubmit()
+        })
+        $("input[name=userName]").keyup(()=>{
+            isCanSubmit();
+        });
+
+        let canSubmit=$("#submitDiv");
+        function isCanSubmit() {
+            if (checkNum.filter(":checked").length === itemNum && $("input[name=userName]").val().length >= 6)
+                canSubmit.slideDown("slow");
+            else
+                canSubmit.slideUp("fast");
+
+        }
+    });
+</script>
+</body>
+</html>

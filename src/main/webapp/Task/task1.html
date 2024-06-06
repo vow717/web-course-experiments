@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            border: 1px red solid;
+            height: 50px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p>请选择课程:</p>
+    <select name="classname" id="classname">
+        <option value="">请选择课程</option>
+        <option value="web">Web</option>
+        <option value="c">c/c++</option>
+        <option value="java">java</option>
+        <option value="python">python</option>
+    </select>
+    <p id="classteacher">你的任课老师:</p>
+
+</div>
+<div class="container">
+<p>随便输入东西，2s后小写全变成大写。</p>
+<input type="text" id="smalltext" />
+</div>
+<script>
+    const courses = [
+        { courseName: "java", teacherName: "BO" },
+        { courseName: "web", teacherName: "SUN" },
+        { courseName: "python", teacherName: "ZHANG" },
+        { courseName: "c", teacherName: "LI" },
+    ];
+
+    const coursename = document.getElementById("classname");
+    const teachername = document.getElementById("classteacher");
+
+    coursename.addEventListener("change", function () {
+        const selectedCourse = courses.find(
+            (course) => course.courseName === coursename.value
+        );
+        if (selectedCourse) {
+            teachername.textContent = `你的任课老师: ${selectedCourse.teacherName}`;
+        } else {
+            teachername.textContent = "你的任课老师:";
+        }
+    });
+
+
+    const text = document.getElementById("smalltext");
+    let time = null;
+    text.addEventListener("keyup", function () {
+        clearTimeout(time);
+        time = setTimeout(function () {
+            text.value = text.value.toUpperCase();
+        }, 2000);
+    });
+    text.addEventListener("keydown", function () {
+        clearTimeout(time);
+    });
+</script>
+</body>
+</html>

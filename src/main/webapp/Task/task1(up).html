@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            display: block;
+            align-items: center;
+            border: 1px red solid;
+            height: auto;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p>请选择你要选的课：</p>
+    <select onchange="model1.updateTeacherName(this)">
+        <option value="">选择一个课程</option>
+        <option value="1">Java</option>
+        <option value="2">Web</option>
+        <option value="3">Python</option>
+    </select>
+    <p >老师姓名:</p>
+    <br>
+    <p>请选择你同桌要选的课：</p>
+    <select onchange="model1.updateTeacherName(this)">
+        <option value="">选择一个课程</option>
+        <option value="1">Java</option>
+        <option value="2">Web</option>
+        <option value="3">Python</option>
+    </select>
+    <p >老师姓名:</p>
+</div>
+<hr />
+<div class="container">
+    <p>随便输入小写英文，2s后自动变成大写。</p>
+    <input
+            type="text"
+            onkeydown="model2.handleKeyDown()"
+            onkeyup="model2.handleKeyUp(this)"
+    />
+    <p>随便输入小写英文，2s后自动变成大写。</p>
+    <input
+            type="text"
+            onkeydown="model2.handleKeyDown()"
+            onkeyup="model2.handleKeyUp(this)"
+    />
+    <p>随便输入小写英文，2s后自动变成大写。</p>
+    <input
+            type="text"
+            onkeydown="model2.handleKeyDown()"
+            onkeyup="model2.handleKeyUp(this)"
+    />
+
+</div>
+</body>
+
+<script>
+    const model1=( function(){
+    const courses = [
+        { id: 1, courseName: "Java", teacherName: "BO" },
+        { id: 2, courseName: "Web", teacherName: "SUN" },
+        { id: 3, courseName: "Python", teacherName: "ZHANG" },
+    ];
+    function updateTeacherName(th) {
+        const course = courses.find((course) => course.id == th.value);
+        const teacherSelect = th.nextElementSibling;
+        if (course) teacherSelect.textContent = `老师姓名：${course.teacherName}`;
+        else teacherSelect.textContent = "老师姓名:";
+    }
+    return {
+        updateTeacherName:updateTeacherName,
+    }
+    })();
+    const model2=(() =>{
+            let timer;
+            function handleKeyDown() {
+                clearTimeout(timer);
+            }
+
+            function handleKeyUp(input) {
+                timer = setTimeout(function () {
+                    input.value = input.value.toUpperCase();
+                }, 2000);
+            }
+            return {
+                handleKeyUp:handleKeyUp,
+                handleKeyDown:handleKeyDown,
+            };
+        }
+        )();
+</script>
+</html>

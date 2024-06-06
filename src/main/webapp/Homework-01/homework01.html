@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            border: 1px solid red;
+            max-width: 960px;
+            margin: 15px auto;
+            border-radius: 20px;
+            padding: 5px;
+
+        }
+        .form-group{
+            margin: 10px;
+            display: block;
+            align-items: center;
+        }
+        .form-group-label{
+            text-align: right;
+            color: black;
+            font-size: 16px;
+            bottom:4px;
+            transition: color 0.4s,font-size 0.4s,bottom 0.4s;
+
+        }
+        .form-group-label-focused{
+            color: red;
+            font-size: 12px;
+            position: relative;
+            bottom:10px
+        }
+
+        .form-group-input input{
+            width: 100%;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid red;
+        }
+        .form-group-input input:focus{
+            border-bottom: 2px solid blue;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>登入</h1>
+    <form>
+        <div class="form-group">
+            <label class="form-group-label">用户名*</label>
+            <div class="form-group-input">
+                <input type="text" id="username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group-label">密码*</label>
+            <div class="form-group-input">
+                <input type="password" id="password">
+            </div>
+        </div>
+        <!--
+        <div class="form-group">
+            <label class="form-group-label">性别</label>
+            <div class="form-group-input">
+                <label><input type="radio" name="sex">男</label>
+                <label><input type="radio" name="sex">女</label>
+            </div>
+        </div>
+        -->
+    </form>
+
+    <script>
+        const inputFields=document.querySelectorAll('.form-group-input input');
+        inputFields.forEach(inputField=>{
+            inputField.addEventListener('focus',function (){
+                const label = this.parentElement.previousElementSibling;
+                label.classList.add('form-group-label-focused');
+            });
+
+            inputField.addEventListener('blur', function() {
+                const label = this.parentElement.previousElementSibling;
+                if(!this.value)
+                label.classList.remove('form-group-label-focused');
+            });
+        })
+    </script>
+</div>
+</body>
+</html>
