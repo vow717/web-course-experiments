@@ -148,6 +148,23 @@
         用这个测试用例：1和5都与3冲突，而1，5不冲突，选了1，5后，只取消1或者5，3依然被封禁。
          */
 
+        const conflictsMap=new Map();
+                 // // 不再一开始就缓存冲突信息，而是在点击事件发生时动态更新
+        function setConflicts(courseId){
+                 const course=courses.find(c => c.id===courseId)
+                 const conflictingCourses = courses
+                     .filter(c => c.id !== courseId) // 排除自身
+                     .filter(c => c.day === course.day)
+                     .filter(c => !(c.endWeek < course.startWeek || course.endWeek < c.startWeek))
+                     .filter(c => course.sections.some(section=>c.sections.includes(section)))
+                     .map(c => ({
+                         c:c,
+                         $input: c.$input,
+                         $tr: c.$tr
+                     }));
+
+            conflictsMap.set(courseId, conflictingCourses);
+        }
         function createTable(courses) {
             const tbody = $('table tbody');
             tbody.empty();
@@ -174,57 +191,23 @@
              */
             $("input").click(function (){
                 const courseIdNow=parseInt($(this).val());
-                const courseNow=courses.find(c=>c.id===courseIdNow);
                 const isChecked=$(this).prop("checked");
 
-                if(!conflictsMap.has(courseNow))
-                setConflicts(courseNow);
+                if(!conflictsMap.has(courseIdNow)) {
+                    setConflicts(courseIdNow);
+                }
 
-                const conflictingCourses = conflictsMap.get(courseNow)||[];
+                const conflictingCourses = conflictsMap.get(courseIdNow)||[];
 
                 for (const course of conflictingCourses) {
-                    if (isChecked) {
-                        course.course.conflictCount++;
-                        course.$tr.addClass("conflict");
-                        course.$input.prop("disabled", true);
-                    } else {
-                        course.course.conflictCount--;
-                        if (course.course.conflictCount === 0) {
-                           course.$tr.removeClass("conflict");
-                           course.$input.prop("disabled", false);
-                        }
-                    }
+                    course.c.conflictCount += isChecked ? 1 : -1;
+                    const hasConflict = course.c.conflictCount > 0;
+                    course.$tr.toggleClass("conflict", hasConflict);
+                    course.$input.prop("disabled", hasConflict);
                 }
+
             })
         }
-        const conflictsMap=new Map();
-
-        // // 不再一开始就缓存冲突信息，而是在点击事件发生时动态更新
-        function setConflicts(course){
-                const conflictingCourses = courses.filter(c => c.id !== course.id && isCourseConflict(course, c));
-                const conflictInfo = conflictingCourses.map(c=>(
-                {
-                    course:c,
-                    $input:c.$input,
-                    $tr:c.$tr
-                }));
-                conflictsMap.set(course, conflictInfo||[]);
-        }
-
-        function isCourseConflict(course1, course2) {
-            return (
-                course1.day === course2.day &&
-                isWeeksOverlap(course1.startWeek, course1.endWeek, course2.startWeek, course2.endWeek) &&
-                isSectionsOverlap(course1.sections, course2.sections)
-            );
-        }
-        function isWeeksOverlap(startWeek1, endWeek1, startWeek2, endWeek2) {
-            return !(endWeek1 < startWeek2 || endWeek2 < startWeek1);
-        }
-        function isSectionsOverlap(sections1, sections2) {
-            return sections1.some(section => sections2.includes(section));
-        }
-
 
         createTable(courses);
     });
