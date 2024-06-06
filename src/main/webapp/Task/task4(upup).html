@@ -170,16 +170,18 @@
             tbody.empty();
 
             courses.forEach(course => {
-                const row = $('<tr>');
-                row.append(`<td>${course.id}</td>`);
-                row.append(`<td>${course.name}</td>`);
-                row.append(`<td>${course.credit}</td>`);
-                row.append(`<td>${course.startWeek}-${course.endWeek}</td>`);
-                row.append(`<td>${course.day} ${course.sections.join('-')}节</td>`);
-                row.append(`<td>${course.teacher}</td>`);
-                row.append(`<td><input type="checkbox" name="course" value="${course.id}"></td>`);
+                const row = $(`
+            <tr>
+                <td>${course.id}</td>
+                <td>${course.name}</td>
+                <td>${course.credit}</td>
+                <td>${course.startWeek}-${course.endWeek}</td>
+                <td>${course.day} ${course.sections.join('-')}节</td>
+                <td>${course.teacher}</td>
+                <td><input type="checkbox" name="course" value="${course.id}"></td>
+            </tr>
+        `);
                 tbody.append(row);
-
                 //添加对应的tr,input,免得后面再查找。
                 course.$input = row.find('input');
                 course.$tr = row;

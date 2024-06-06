@@ -28,6 +28,7 @@
     <div>
         <p>请输入一串数字,2s后变成,隔开版</p>
         <input type="text" onkeydown="model.handleKeyDown()" onkeyup="model.handleKeyUp(this)">
+        <p id="pChange"></p>
     </div>
     <hr>
     <div>
@@ -48,19 +49,40 @@
 <script>
     const model=(()=>{
         let timer;
+        const p=document.getElementById("pChange");
         function handleKeyDown(){
             clearTimeout(timer);
         }
         function handleKeyUp(input){
             timer=setTimeout(()=>{
-                /*每次执行前要把之前逗号去掉，不然会12,345后续再写个6变成12,3,456（12后面的，保留了)。*/
                 let inputValue = input.value.split(',').join('');
 
-                const inputArray=inputValue.split('');
-                for(let i=inputArray.length-3;i>0;i-=3)
-                    inputArray.splice(i,0,',');
-                input.value = inputArray.join('');
-            },2000)
+                const isNegative = inputValue.startsWith('-');
+                if (isNegative) {
+                    inputValue = inputValue.substring(1);
+                }
+
+                const parts = inputValue.split('.');
+                let integerPart = parts[0];
+                const decimalPart = parts[1] || '';
+
+                const integerArray = integerPart.split('');
+                for (let i = integerArray.length - 3; i > 0; i -= 3) {
+                    integerArray.splice(i, 0, ',');
+                }
+                integerPart = integerArray.join('');
+
+                let formattedValue = integerPart;
+                if (decimalPart) {
+                    formattedValue += '.' + decimalPart;
+                }
+
+                if (isNegative) {
+                    formattedValue = '-' + formattedValue;
+                }
+
+                p.textContent = formattedValue;
+            }, 2000);
         }
         return {
             handleKeyDown:handleKeyDown,
