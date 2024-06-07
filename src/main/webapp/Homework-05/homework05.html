@@ -5,7 +5,6 @@
     <title>Title</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <style>
         *{
             padding: 0;
@@ -73,7 +72,7 @@
                 $(this).find(".fab-menu").fadeIn(300);
                 $(this).find('.fab-btn i').text('remove');
                 $(this).find('.fab-btn').animate({ deg: 180 }, {
-                    duration: 300,
+                    duration: 100,
                     step: function(now) {
                         $(this).css('transform', 'rotate(' + now + 'deg)');
                     }
@@ -83,7 +82,7 @@
                 $(this).find(".fab-menu").fadeOut(300);
                 $(this).find('.fab-btn i').text($(this).find('.fab-btn').data("src"));
                 $(this).find('.fab-btn').animate({ deg: 0 }, {
-                    duration: 300,
+                    duration: 100,
                     step: function(now) {
                         $(this).css('transform', 'rotate(' + now + 'deg)');
                     }
