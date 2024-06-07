@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .fab{
+            position: fixed;
+            top: 5%;
+            right: 5%;
+            height: auto;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .fab-btn{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: deepskyblue;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s;/*这个是如果用下面注释掉的代码写要用到*/
+        }
+        .fab-btn i{
+            font-size: 80px;
+            color: white;
+            transition: transform 0.3s;
+        }
+        .fab-menu{
+            display: none;
+            margin-top: 20px;
+        }
+        .fab-menu li{
+            display: block;
+            margin-bottom: 10px;
+        }
+        .fab-menu i{
+            font-size: 50px;
+            color: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<div class="fab">
+    <div class="fab-btn" data-src="shopping_cart">
+        <i class="material-icons">shopping_cart</i>
+    </div>
+    <div class="fab-menu">
+        <ul>
+            <li><a href=""><i class="material-icons">shopping_basket</i></a></li>
+            <li><a href=""><i class="material-icons">shop</i></a></li>
+            <li><a href=""><i class="material-icons">store</i></a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $(".fab").hover(
+            function() {
+                $(this).find(".fab-menu").fadeIn(300);
+                $(this).find('.fab-btn i').text('remove');
+                $(this).find('.fab-btn').animate({ deg: 180 }, {
+                    duration: 300,
+                    step: function(now) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
+            },
+            function() {
+                $(this).find(".fab-menu").fadeOut(300);
+                $(this).find('.fab-btn i').text($(this).find('.fab-btn').data("src"));
+                $(this).find('.fab-btn').animate({ deg: 0 }, {
+                    duration: 300,
+                    step: function(now) {
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
+            }
+        );
+    });
+    /*
+        我发现也可以不用animate，配合transition,transform也能达到旋转的效果。
+         $(".fab").hover(
+            function() {
+                $(this).find(".fab-menu").fadeIn(300);
+                $(this).find('.fab-btn i').text('remove');
+                $(this).find('.fab-btn').css('transform', 'rotate(180deg)');
+            },
+            function() {
+                $(this).find(".fab-menu").fadeOut(300);
+                $(this).find('.fab-btn i').text($(this).find('.fab-btn').data("src"));
+                $(this).find('.fab-btn').css('transform', 'rotate(0deg)');
+            }
+        );
+         */
+</script>
+</body>
+</html>
