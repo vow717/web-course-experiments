@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .container{
+            display: block;
+            padding: 10px;
+            border: 1px solid red;
+            width: 420px;
+            height: auto;
+        }
+        div{
+            margin: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div>
+        <p>请输入一串数字,2s后变成,隔开版</p>
+        <input type="text" onkeydown="model.handleKeyDown()" onkeyup="model.handleKeyUp(this)">
+        <p id="pChange"></p>
+    </div>
+    <hr>
+    <div>
+        <p id="list">目前共有1000w个数据</p>
+        <p>进行20次随机，展现出不同方式的平均时间效率。</p>
+        <button onclick="model2.showAvg('id')">点击查看</button>
+
+        <p>体会时间效率上的差异</p>
+    </div>
+</div>
+
+<script>
+    const model=(()=>{
+        let timer;
+        const p=document.getElementById("pChange");
+        function handleKeyDown(){
+            clearTimeout(timer);
+        }
+        function handleKeyUp(input){
+            timer=setTimeout(()=>{
+                let inputValue = input.value.split(',').join('');
+
+                const isNegative = inputValue.startsWith('-');
+                if (isNegative) {
+                    inputValue = inputValue.substring(1);
+                }
+
+                const parts = inputValue.split('.');
+                let integerPart = parts[0];
+                const decimalPart = parts[1] || '';
+
+                const integerArray = integerPart.split('');
+                for (let i = integerArray.length - 3; i > 0; i -= 3) {
+                    integerArray.splice(i, 0, ',');
+                }
+                integerPart = integerArray.join('');
+
+                let formattedValue = integerPart;
+                if (decimalPart) {
+                    formattedValue += '.' + decimalPart;
+                }
+
+                if (isNegative) {
+                    formattedValue = '-' + formattedValue;
+                }
+
+                p.textContent = formattedValue;
+            }, 2000);
+        }
+        return {
+            handleKeyDown:handleKeyDown,
+            handleKeyUp:handleKeyUp,
+        }
+    })();
+
+    const model2=(()=>{
+        const objs = [];
+        function remakeObjs() {
+            objs.length=0;
+            for (let i = 0; i < 10000000; i++) {
+                objs.push({ id: Math.floor(Math.random() * 1000) })
+            }
+        }
+        function removeSameByObject(unique) {
+            const objs1 = objs;
+            const seen = {};//把值当作属性名字置于对象中，用hasOwnProperty查找，查找速度比set还快。
+            return objs1.filter(item => {
+                (!seen.hasOwnProperty(item[unique]) && seen[item[unique]])
+                   //item[unique]作为键，存储在seen对象中，并将其值设置为true。
+            });
+        }
+        function removeSameByObjectFor(unique) {
+            const seen = {};
+            const result = [];
+            for (let i=0;i<objs.length;i++) {
+                if (!seen.hasOwnProperty(objs[i][unique])) {
+                    seen[objs[i][unique]] = true;
+                    result.push(objs[i]);
+                }
+            }
+            return result;
+        }
+        function removeSameByObjectForOf(unique) {
+            const seen = {};
+            const result = [];
+            for (let item of objs) {
+                if (!seen.hasOwnProperty(item[unique])) {
+                    seen[item[unique]] = true;
+                    result.push(item);
+                }
+            }
+            return result;
+        }
+        function removeSameByObjectForEach(unique) {
+            const seen = {};
+            const result = [];
+            objs.forEach(item => {
+                if (!seen.hasOwnProperty(item[unique])) {
+                    seen[item[unique]] = true;
+                    result.push(item);
+                }
+            });
+            return result;
+        }
+
+        const output=document.getElementById("list");
+
+        function changeToUniqueByObject(unique) {
+            const startTime = performance.now();
+            removeSameByObject(unique);
+            const endTime = performance.now();
+            return endTime - startTime;
+        }
+        function changeToUniqueByObjectFor(unique) {
+            const startTime = performance.now();
+            removeSameByObjectFor(unique);
+            const endTime = performance.now();
+            return endTime - startTime;
+        }
+        function changeToUniqueByObjectForOf(unique) {
+            const startTime = performance.now();
+            removeSameByObjectForOf(unique);
+            const endTime = performance.now();
+            return endTime - startTime;
+        }
+        function changeToUniqueByObjectForEach(unique) {
+            const startTime = performance.now();
+            removeSameByObjectForEach(unique);
+            const endTime = performance.now();
+            return endTime - startTime;
+        }
+
+        function showAvg(unique) {
+            output.innerHTML = "请稍等....";
+            setTimeout(() => {
+                let objAvg2 = 0;//forof
+                let objAvg = 0;//forfilter
+                let objAvg3 = 0;//foreach
+                let objAvg4 = 0;//for
+                for (let i = 0; i < 20; i++) {
+                    remakeObjs();
+                    objAvg += changeToUniqueByObject(unique);
+                    objAvg2 += changeToUniqueByObjectForOf(unique);
+                    objAvg3 += changeToUniqueByObjectForEach(unique);
+                    objAvg4 += changeToUniqueByObjectFor(unique);
+                }
+                objAvg /= 20;
+                objAvg2 /= 20;
+                objAvg3 /= 20;
+                objAvg4 /= 20;
+                output.innerHTML = `object的基本for平均耗时:${objAvg4}<br>object的foreach平均耗时:${objAvg3}<br>object的forof平均耗时:${objAvg2}<br>object的filter平均耗时:${objAvg}<br>`;
+            }, 20);
+        }
+        return {
+          showAvg:showAvg
+        }
+    })();
+    /*
+        JSON.stringify(value, replacer, space)方法将 JavaScript 对象转换为 JSON 字符串。
+如果 value 参数是一个对象或数组，会对其中的每个属性或元素进行序列化。
+如果 value 参数是一个非对象的值（如字符串、数字、布尔值等），会直接转换为对应的 JSON 字符串。
+当使用 replacer 参数时，可以通过指定一个函数来自定义序列化过程，或者传入一个属性数组来选择要序列化的属性。
+当使用 space 参数时，可以指定一个字符串或数字来指定输出格式的缩进方式。
+
+         */
+</script>
+</body>
+</html>
