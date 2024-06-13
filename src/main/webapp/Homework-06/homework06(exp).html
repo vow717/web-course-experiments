@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>事件冒泡示例</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<button id="openModal">打开模态框</button>
+
+<div class="modal" id="myModal">
+  <div class="modal-content">
+    <p>点击下面的按钮：</p>
+    <button id="innerButton">内部按钮</button>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $("#openModal").click(function() {
+      $("#myModal").show();
+    });
+
+    $("#myModal").click(function() {
+      $(this).hide();
+    });
+
+    $("#innerButton").click(function(event) {
+      // 如果不阻止事件冒泡，点击按钮会触发模态框的点击事件$("#myModal").click，导致模态框关闭
+      // event.stopPropagation() 阻止事件冒泡到父元素，保证模态框不会关闭
+      event.stopPropagation();
+      alert("内部按钮被点击");
+    });
+    $(".modal-content").click(function(event) {
+      // 同理
+      event.stopPropagation();
+      alert("对话框内非按钮区域被点击");
+    });
+  });
+</script>
+
+</body>
+</html>
