@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
         *{
@@ -12,26 +11,37 @@
             margin: 0;
             box-sizing: border-box;
         }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            padding: 10px;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+        }
         .modal{
             display: none;
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
             background-color: rgba(0,0,0,0.5);
         }
         .modal-dialog{
-            width: 30%;
-            height: 30%;
+            width: 500px;
+            height: 350px;
             margin: 10% auto;
             background-color: #fff;
             border-radius: 10px;
             position: relative;
-            transform: translateY(-30px);
         }
         .modal-dialog-content{
             width: 100%;
             height: 100%;
+            letter-spacing: 2px;
         }
         .modal-dialog-header{
             font-size: 35px;
@@ -47,30 +57,41 @@
             border-bottom: 1px solid #ccc;
         }
         .modal-dialog-footer{
+            overflow: auto;
             text-align: right;
             padding: 10px;
             height: 25%;
         }
-        button[data-modal-target]{
+        [data-modal-target]{
             padding: 10px;
             font-size: 25px;
             border-radius: 5px;
-            cursor: grab;
+            cursor: pointer;
             background-color: deepskyblue;
             transition: background-color 0.3s;
         }
-        button[data-modal-target]:hover{
+        [data-modal-target]:hover{
             background-color: cornflowerblue;
         }
-        button[data-modal-dismiss],[data-modal-submit]{
+
+        [data-modal-dismiss],[data-modal-submit]{
             padding: 10px;
             font-size: 15px;
-            cursor: grab;
+            cursor: pointer;
         }
     </style>
 
 </head>
 <body>
+<div class="container">
+    <div style="left: 0">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium culpa dolores dolorum exercitationem inventore, magnam nam optio provident quasi quia sunt tenetur ut vero. Ad alias aperiam aut cumque dolor, esse libero minus non numquam omnis placeat porro provident quaerat quidem quisquam rerum sit soluta tempora veritatis, voluptatem? Culpa dignissimos eaque nemo officia quis saepe vitae. Alias, aliquid assumenda cumque debitis exercitationem facere hic in labore mollitia nam nostrum officia, praesentium provident quibusdam quisquam repellendus voluptate. Adipisci at beatae cum doloremque eius eligendi fugit hic illum impedit itaque laboriosam, laudantium, officiis perspiciatis porro quas quisquam, repudiandae rerum sint tempore voluptates?
+
+    </div>
+    <div style="padding: 10px">
+        <button type="button" data-modal-target="myModal1">打开模态框1</button>
+        <button type="button"  data-modal-target="myModal2">打开模态框2</button>
+    </div>
 <div class="modal" id="myModal1">
     <div class="modal-dialog">
         <div class="modal-dialog-content">
@@ -96,34 +117,30 @@
         </div>
     </div>
 </div>
-
-<div style="padding: 10px">
-    <button type="button" data-toggle="modal" data-modal-target="#myModal1">打开模态框1</button>
-    <button type="button" data-toggle="modal" data-modal-target="#myModal2">打开模态框2</button>
 </div>
 <script>
     $(document).ready(()=>{
-        $("button[data-modal-target]").click(function (){
+
+        $("[data-modal-target]").click(function (){
             const modalId=$(this).data("modal-target");
-            $(modalId).children(".modal-dialog").animate({top:"50px"},300);
-            $(modalId).fadeIn(300);
+            $(`#${modalId}`).children(".modal-dialog").animate({top:"50px"},300);
+            $(`#${modalId}`).fadeIn(300);
         })
-        $("button[data-modal-dismiss]").click(function () {
+        $("[data-modal-dismiss]").click(function () {
             $(this).closest(".modal-dialog").animate({top:"0px"},300);
             $(this).closest(".modal").fadeOut(300);
         });
-        $("button[data-modal-submit]").click(()=>{
+        $("[data-modal-submit]").click(()=>{
             alert("说了没用你还点。")
         })
         // 阻止事件冒泡到父元素
-        $(".modal-dialog").click(function(event) {
-            event.stopPropagation();
-        });
+        $(".modal-dialog").click(() => false);
         // 点击模态框外部关闭模态框(由于阻止了事件冒泡，所以点dialog里面不会关闭模态框)
         $(".modal").click(function() {
             $(this).children(".modal-dialog").animate({top:"0px"},300);
             $(this).fadeOut(300);
         });
+
     })
 </script>
 </body>
