@@ -14,7 +14,7 @@
 全部用户
 <ul>
     <c:forEach items="${users}" var="u">
-        <li>${u.name}</li>
+        <li>id:${u.id};姓名:${u.name}</li>
     </c:forEach>
 </ul>
 <hr>
@@ -23,7 +23,7 @@
 <form action="experiment7/update" method="post">
     <select name="uid">
        <c:forEach items="${users}" var="u">
-           <option value="${u.id}">${u.name}</option>
+           <option value="${u.id}">${u.id}</option>
        </c:forEach>
     </select>
     新名字：<input type="text" name="newName" required>
@@ -40,16 +40,17 @@
 </ul>
 <hr>
 <h3>Add</h3>
-添加用户
+添加用户(添加重复的ID/空啥事没有)
 <form action="experiment7/add" method="post">
-    姓名:<input type="text" name="name">
+    id: <input type="text" name="id"><br>
+    姓名:<input type="text" name="name"><br>
     <button type="submit">添加</button>
 </form>
 <h3>Delete</h3>
 删除用户
 <form action="experiment7/delete" method="post">
-    需要删除的用户姓名: <input type="text" name="name"><br>
-    (删除不存在的用户名啥事没有发生)<br>
+    需要删除的用户ID: <input type="text" name="id"><br>
+    (删除不存在的id啥事没有发生)<br>
     <button type="submit" onclick="confirmDelete()">删除</button>
 </form>
 

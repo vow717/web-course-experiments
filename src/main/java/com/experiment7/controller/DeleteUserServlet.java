@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name=req.getParameter("name");
-        String sql="delete from user where name=?";
+        String id=req.getParameter("id");
+        String sql="delete from user where id=?";
         try(Connection conn = DataSourceUtils.getConnection();
             PreparedStatement ps =conn.prepareStatement(sql)){
-            ps.setString(1,name);
+            ps.setString(1,id);
             int rowsAffected = ps.executeUpdate();
             System.out.println(rowsAffected);
         } catch (SQLException e) {

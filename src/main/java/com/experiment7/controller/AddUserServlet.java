@@ -16,11 +16,13 @@ import java.sql.SQLException;
 public class AddUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id=req.getParameter("id");
         String name=req.getParameter("name");
-        String sql="insert into user(name) values(?)";
+        String sql="insert into user(id,name) values(?,?)";
         try(Connection conn= DataSourceUtils.getConnection();
             PreparedStatement ps= conn.prepareStatement(sql)){
-            ps.setString(1,name);
+            ps.setString(1,id);
+            ps.setString(2,name);
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
