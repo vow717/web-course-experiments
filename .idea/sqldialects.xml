@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/experiment7/controller/AddUserServlet.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/experiment7/controller/DeleteUserServlet.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/experiment7/controller/GetUserServlet.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/experiment7/controller/IndexServlet.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/experiment7/controller/UpdateUserServlet.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/experiment8/service/getAllUsersService.java" dialect="GenericSQL" />
   </component>
 </project>
